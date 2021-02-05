@@ -6,6 +6,26 @@ const HeaderBlock = styled.div`
     justify-content: space-between;
     align-items: center;
     height: 80px;
+    a {
+        color: inherit;
+        text-decoration: none;
+       }
+       a:visited {
+        text-decoration: none;
+        color: inherit;
+       }
+       a:hover {
+        text-decoration: none;
+        color: inherit;
+       }
+       a:focus {
+        text-decoration: none;
+        color: inherit;
+       }
+       a:active {
+        text-decoration: none;
+        color: inherit;
+       } 
 `;
 
 const HeaderTitle = styled.h3`
@@ -30,19 +50,19 @@ const Header = () => {
     return (
         <HeaderBlock>
             <HeaderTitle>
-                <a href="#">
-                Game of Thrones DB
+                <a href='#'>
+                    Game of Thrones DB
                 </a>
             </HeaderTitle>
             <HeaderLinks>
                 <li>
-                    <a href="#">Characters</a>
+                    <a href='#'>Characters</a>
                 </li>
                 <li>
-                    <a href="#">Houses</a>
+                    <a href='#'>Houses</a>
                 </li>
                 <li>
-                    <a href="#">Books</a>   
+                    <a href='#'>Books</a>
                 </li>
             </HeaderLinks>
         </HeaderBlock>

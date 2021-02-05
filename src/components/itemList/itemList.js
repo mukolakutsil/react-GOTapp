@@ -1,20 +1,29 @@
-import React, {Component} from 'react';
-import './itemList.css';
+import React, { Component } from 'react';
+import styled from 'styled-components';
 export default class ItemList extends Component {
 
     render() {
+
+        const ItemGroupLi = styled.li`
+         cursor: pointer;
+        `;
+
+        const ItemGroupUl = styled.ul`
+        cursor: pointer;
+       `;
+
         return (
-            <ul className="item-list list-group">
-                <li className="list-group-item">
+            <ItemGroupUl>
+                <ItemGroupLi>
                     John Snow
-                </li>
-                <li className="list-group-item">
+                </ItemGroupLi>
+                <ItemGroupLi>
                     Brandon Stark
-                </li>
-                <li className="list-group-item">
+                </ItemGroupLi>
+                <ItemGroupLi>
                     Geremy
-                </li>
-            </ul>
+                </ItemGroupLi>
+            </ItemGroupUl>
         );
     }
 }
