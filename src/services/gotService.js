@@ -44,16 +44,22 @@ export default class GotService extends Component {
         return this.getResourse(`/books/${id}`);
     }
 
-    isSet = (data) => {
+    isSet(data) {
         if (data) {
-            return data;
+            return data
         } else {
-            return 'no data :(';
+            return 'no data :('
         }
     }
 
-    _transformCharacter(char) {
+    _extractId = (item) => {
+        const idRegExp = /\/([0-9]*)$/;
+        return item.url.match(idRegExp)[1];
+    }
+
+    _transformCharacter = (char) => {
         return {
+            id: this._extractId(char),
             name: this.isSet(char.name),
             gender: this.isSet(char.gender),
             born: this.isSet(char.born),

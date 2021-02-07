@@ -8,10 +8,15 @@ const ErrorMessage = (props) => {
       width: 100%;
     `;
 
+    const SpanMessage = styled.span`
+        color: red;
+        font-size: 20px;
+    `;
+
     return (
         <>
             <Img src={img} alt="error" />
-            <span>Something goes wrong(</span>
+            <SpanMessage>Something goes wrong(</SpanMessage>
         </>
     )
 }

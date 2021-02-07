@@ -1,33 +1,69 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import GotService from '../../services/gotService';
+import ErrorMessage from '../errorMessage';
+import Spinner from '../spinner/spinner';
 export default class ItemList extends Component {
 
-    render() {
+    gotService = new GotService();
+    state = {
+        charList: null,
+        error: false
+    }
 
-        const ItemGroupLi = styled.li`
-         cursor: pointer;
-         padding: 20px;
-         border-bottom: 1px solid rgb(169, 169, 169);
-         list-style: none;
-        `;
+    componentDidMount() {
+        this.gotService.getAllCharacters()
+            .then(charList => {
+                this.setState({
+                    charList
+                })
+            })
+    }
+
+    componentDidCatch() {
+        this.setState({
+            error: true
+        })
+    }
+
+    renderItems = (arr) => {
+        return arr.map((item, i) => {
+            const { id, name } = item;
+            return (
+                <li
+                    key={id}
+                    className="list-group-item"
+                    onClick={() => this.props.onCharSelected(id)}
+                >
+                    {name}
+                </li>
+            )
+        })
+    }
+    render() {
 
         const ItemGroupUl = styled.ul`
         cursor: pointer;
         background-color: white;
         border-radius: 5px;
-       `;
+        `;
+
+        if (this.state.error) {
+            return <ErrorMessage />
+        }
+
+        const { charList } = this.state;
+
+        if (!charList) {
+            return <Spinner />
+        }
+
+        const items = this.renderItems(charList);
+
 
         return (
             <ItemGroupUl>
-                <ItemGroupLi>
-                    John Snow
-                </ItemGroupLi>
-                <ItemGroupLi>
-                    Brandon Stark
-                </ItemGroupLi>
-                <ItemGroupLi>
-                    Geremy
-                </ItemGroupLi>
+                {items}
             </ItemGroupUl>
         );
     }
