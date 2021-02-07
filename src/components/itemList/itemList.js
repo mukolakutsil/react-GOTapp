@@ -6,10 +6,15 @@ export default class ItemList extends Component {
 
         const ItemGroupLi = styled.li`
          cursor: pointer;
+         padding: 20px;
+         border-bottom: 1px solid rgb(169, 169, 169);
+         list-style: none;
         `;
 
         const ItemGroupUl = styled.ul`
         cursor: pointer;
+        background-color: white;
+        border-radius: 5px;
        `;
 
         return (
