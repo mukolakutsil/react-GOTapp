@@ -1,47 +1,46 @@
-import React, { Component } from 'react';
-
-
-export default class GotService extends Component {
-    constructor(props) {
-        super(props);
-        this._apiBase = 'https://anapioficeandfire.com/api';
+export default class GotService {
+    constructor() {
+        this._apiBase = 'https://www.anapioficeandfire.com/api';
     }
 
-
-    getResourse = async (url) => {
+    getResource = async (url) => {
         const res = await fetch(`${this._apiBase}${url}`);
 
         if (!res.ok) {
-            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+            throw new Error(`Could not fetch ${url}` +
+                `, received ${res.status}`);
         }
-
         return await res.json();
-    };
+    }
+
+    getAllBooks = async () => {
+        const res = await this.getResource(`/books/`);
+        return res.map(this._transformBook);
+    }
+
+    getBook = async (id) => {
+        const book = await this.getResource(`/books/${id}/`);
+        return this._transformBook(book);
+    }
 
     getAllCharacters = async () => {
-        const res = await this.getResourse(`/characters?page=5`);
-        return res.map(this._transformCharacter)
+        const res = await this.getResource(`/characters?page=5&pageSize=10`);
+        return res.map(this._transformCharacter);
     }
 
     getCharacter = async (id) => {
-        const character = await this.getResourse(`/characters/${id}`);
+        const character = await this.getResource(`/characters/${id}`);
         return this._transformCharacter(character);
     }
 
-    getAllHouses = () => {
-        return this.getResourse('/houses/');
+    getAllHouses = async () => {
+        const res = await this.getResource(`/houses/`);
+        return res.map(this._transformHouse);
     }
 
-    getHouse = (id) => {
-        return this.getResourse(`/houses/${id}/`)
-    }
-
-    getBooks = () => {
-        return this.getResourse(`/books?page=5`);
-    }
-
-    getBook = (id) => {
-        return this.getResourse(`/books/${id}`);
+    getHouse = async (id) => {
+        const house = await this.getResource(`/houses/${id}/`);
+        return this._transformHouse(house);
     }
 
     isSet(data) {
@@ -68,24 +67,24 @@ export default class GotService extends Component {
         };
     }
 
-    _transformHouse(house) {
+    _transformHouse = (house) => {
         return {
-            name: house.name,
-            region: house.region,
-            words: house.words,
-            titles: house.titles,
-            overlord: house.overlord,
-            ancestralWeapons: house.ancestralWeapons
+            id: this._extractId(house),
+            name: this.isSet(house.name),
+            region: this.isSet(house.region),
+            words: this.isSet(house.words)
         };
     }
 
-    _transformBook(book) {
+    _transformBook = (book) => {
         return {
-            name: book.name,
-            numberOfPages: book.numberOfPages,
-            publiser: book.publiser,
-            released: book.released
+            id: this._extractId(book),
+            name: this.isSet(book.name),
+            numberOfPages: this.isSet(book.numberOfPages),
+            publisher: this.isSet(book.publisher),
+            released: this.isSet(book.released),
+            authors: this.isSet(book.authors),
+            country: this.isSet(book.country)
         };
     }
-
 }
