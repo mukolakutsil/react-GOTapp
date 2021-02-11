@@ -6,8 +6,9 @@ import styled from 'styled-components';
 import ErrorMessage from '../errorMessage';
 import CharecterPage from '../pages/charecterPage';
 import GotService from '../../services/gotService';
-import BooksPage from '../pages/booksPage';
-import HousesPage from '../pages/housesPage/housesPage';
+import { BooksPage, BooksItem } from '../pages/booksPage';
+import HousesPage from '../pages/housesPage';
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 
 export default class App extends Component {
@@ -49,36 +50,51 @@ export default class App extends Component {
          }
         `
 
+        const Wrapper = styled.div`
+          {
+            background: url('../../../public/img/got.jpeg') center center no-repeat;
+            background-size: cover;
+            height: 1020px;	
+          }
+        `
+
         if (this.state.error) {
             return <ErrorMessage />
         }
 
         return (
-            <>
-                <Container>
-                    <Header />
-                </Container>
-                <Container>
-                    <Row>
-                        <Col lg={{ size: 5, offset: 0 }}>
-                            {this.state.randomChar ? <RandomChar /> : null}
-                            <StyledButton>
-                                <Button
-                                    color="primary"
-                                    onClick={this.onButtonRandomChar}
-                                >
-                                    {this.state.randomChar ?
-                                        'Hide Random Char Block' :
-                                        'Show Random Char Block'}
-                                </Button>
-                            </StyledButton>
-                        </Col>
-                    </Row>
-                    <CharecterPage />
-                    <BooksPage />
-                    <HousesPage />
-                </Container>
-            </>
+            <Router>
+                <Wrapper>
+                    <Container>
+                        <Header />
+                    </Container>
+                    <Container>
+                        <Row>
+                            <Col lg={{ size: 5, offset: 0 }}>
+                                {this.state.randomChar ? <RandomChar /> : null}
+                                <StyledButton>
+                                    <Button
+                                        color="primary"
+                                        onClick={this.onButtonRandomChar}
+                                    >
+                                        {this.state.randomChar ?
+                                            'Hide Random Char Block' :
+                                            'Show Random Char Block'}
+                                    </Button>
+                                </StyledButton>
+                            </Col>
+                        </Row>
+                        <Route path='/character' component={CharecterPage} />
+                        <Route path='/houses' component={HousesPage} />
+                        <Route path='/books' exact component={BooksPage} />
+                        <Route path='/books/:id' render={
+                            ({ match }) => {
+                                const { id } = match.params;
+                                return < BooksItem selectedItem={id} />
+                            }} />
+                    </Container>
+                </Wrapper>
+            </Router>
         );
     }
 };
