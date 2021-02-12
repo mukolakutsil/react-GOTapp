@@ -1,70 +1,73 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import ErrorMessage from '../errorMessage';
 import Spinner from '../spinner/spinner';
-export default class ItemList extends Component {
 
-    state = {
-        itemList: null,
-        error: false
-    }
+const ItemList = (props) => {
 
-    componentDidMount() {
-        const { getData } = this.props;
-        getData()
-            .then(itemList => {
-                this.setState({
-                    itemList
-                })
-            })
-    }
 
-    componentDidCatch() {
-        this.setState({
-            error: true
-        })
-    }
-
-    renderItems = (arr) => {
-        return arr.map((item) => {
+    const renderItems = (arr) => {
+        return arr.map(item => {
             const { id } = item;
-            const label = this.props.renderItem(item);
+            const label = props.renderItem(item);
             return (
                 <li
                     key={id}
                     className="list-group-item"
-                    onClick={() => this.props.onItemSelected(id)}
+                    onClick={() => props.onItemSelected(id)}
                 >
                     {label}
                 </li>
             )
         })
     }
-    render() {
 
-        const ItemGroupUl = styled.ul`
+    const ItemGroupUl = styled.ul`
         cursor: pointer;
         background-color: white;
         border-radius: 5px;
         `;
 
-        if (this.state.error) {
-            return <ErrorMessage />
+
+    const { data } = props;
+    const items = renderItems(data);
+
+
+    return (
+        <ItemGroupUl>
+            {items}
+        </ItemGroupUl>
+    );
+}
+
+const withData = (View) => {
+    return class extends Component {
+        state = {
+            data: null,
         }
 
-        const { itemList } = this.state;
-
-        if (!itemList) {
-            return <Spinner />
+        componentDidMount() {
+            const { getData } = this.props;
+            getData()
+                .then(data => {
+                    this.setState({
+                        data
+                    })
+                })
         }
 
-        const items = this.renderItems(itemList);
+        render() {
 
+            const { data } = this.state;
 
-        return (
-            <ItemGroupUl>
-                {items}
-            </ItemGroupUl>
-        );
+            if (!data) {
+                return <Spinner />
+            }
+            return <View {...this.props} data={data} />
+
+        }
     }
 }
+
+
+
+export default withData(ItemList);
